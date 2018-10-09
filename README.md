@@ -25,6 +25,7 @@
 - 200 OK 
   - `id`: String
 - 403 BAD_REQUEST
+- 404 NOT_FOUND
 ---
 ### POST /songs
 #### Parámetros del cuerpo
