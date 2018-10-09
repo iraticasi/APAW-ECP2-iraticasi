@@ -1,8 +1,6 @@
 package api.apiControllers;
 
-import api.businessControllers.PlaylistBusinessController;
 import api.businessControllers.SongBusinessController;
-import api.dtos.PlaylistDto;
 import api.dtos.SongDto;
 import api.exceptions.ArgumentNotValidException;
 
@@ -24,14 +22,16 @@ public class SongApiController {
             throw new ArgumentNotValidException(message + " is NULL");
         }
     }
-    private void validateDate(String date){
+
+    private void validateDate(String date) {
         String regexp = "\\d{4}/\\d{2}/\\d{2}";
         if ((date != null) && !date.matches(regexp)) {
             throw new ArgumentNotValidException("songDto date wronw format");
         }
     }
-    private void validateInteger(Integer integer){
-        if (Integer.signum(integer) == -1){
+
+    private void validateInteger(Integer integer) {
+        if (Integer.signum(integer) == -1) {
             throw new ArgumentNotValidException("songDto seconds is negative");
         }
     }

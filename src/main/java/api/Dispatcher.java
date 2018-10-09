@@ -55,7 +55,7 @@ public class Dispatcher {
             response.setBody(this.userApiController.create((UserDto) request.getBody()));
         } else if (request.isEqualsPath(PlaylistApiController.PLAYLIST)) {
             response.setBody(this.playlistApiController.create((PlaylistDto) request.getBody()));
-        } else if (request.isEqualsPath(SongApiController.SONGS)){
+        } else if (request.isEqualsPath(SongApiController.SONGS)) {
             response.setBody(this.songApiController.create((SongDto) request.getBody()));
         } else {
             throw new RequestInvalidException("method error: " + request.getMethod());

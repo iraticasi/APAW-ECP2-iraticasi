@@ -1,8 +1,6 @@
 package api.daos.memory;
 
-import api.daos.PlaylistDao;
 import api.daos.SongDao;
-import api.entities.Playlist;
 import api.entities.Song;
 
 import java.util.HashMap;

@@ -1,15 +1,10 @@
 package api;
 
-import api.apiControllers.PlaylistApiController;
 import api.apiControllers.SongApiController;
-import api.apiControllers.UserApiController;
 import api.daos.DaoFactory;
 import api.daos.memory.DaoMemoryFactory;
-import api.dtos.PlaylistDto;
 import api.dtos.SongDto;
-import api.dtos.UserDto;
 import api.entities.Genre;
-import api.entities.Playlist;
 import http.Client;
 import http.HttpException;
 import http.HttpRequest;
