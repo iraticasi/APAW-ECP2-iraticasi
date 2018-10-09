@@ -1,6 +1,6 @@
 package api.entities;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Song {
 
@@ -12,7 +12,7 @@ public class Song {
 
     private int seconds;
 
-    private LocalDateTime date;
+    private LocalDate date;
 
     private Genre genre;
 
@@ -29,44 +29,44 @@ public class Song {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getSinger() {
-        return singer;
-    }
-
-    public int getSeconds() {
-        return seconds;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
-
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getSinger() {
+        return singer;
+    }
+
     public void setSinger(String singer) {
         this.singer = singer;
+    }
+
+    public int getSeconds() {
+        return seconds;
     }
 
     public void setSeconds(int seconds) {
         this.seconds = seconds;
     }
 
-    public void setDate(LocalDateTime date) {
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public Genre getGenre() {
+        return genre;
     }
 
     public void setGenre(Genre genre) {
@@ -77,7 +77,7 @@ public class Song {
 
         private Song song;
 
-        public Builder(String name){
+        public Builder(String name) {
             this.song = new Song(name);
         }
 
@@ -87,26 +87,26 @@ public class Song {
         }
 
         public Builder singer(String singer) {
-            this.song.singer=singer;
+            this.song.singer = singer;
             return this;
         }
 
         public Builder seconds(int seconds) {
-            this.song.seconds=seconds;
+            this.song.seconds = seconds;
             return this;
         }
 
-        public Builder date(LocalDateTime date) {
+        public Builder date(LocalDate date) {
             this.song.date = date;
             return this;
         }
 
         public Builder genre(Genre genre) {
-            this.song.genre =genre;
+            this.song.genre = genre;
             return this;
         }
 
-        public Song build(){
+        public Song build() {
             return this.song;
         }
     }
