@@ -28,8 +28,8 @@ class UsersIT {
     }
 
     @Test
-    void testUserInvalidRequest(){
-        HttpRequest request = HttpRequest.builder(UserApiController.USERS+"/invalid").body(null).post();
+    void testUserInvalidRequest() {
+        HttpRequest request = HttpRequest.builder(UserApiController.USERS + "/invalid").body(null).post();
         HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
     }
