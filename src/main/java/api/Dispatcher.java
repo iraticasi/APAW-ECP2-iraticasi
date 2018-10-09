@@ -1,8 +1,10 @@
 package api;
 
 import api.apiControllers.PlaylistApiController;
+import api.apiControllers.SongApiController;
 import api.apiControllers.UserApiController;
 import api.dtos.PlaylistDto;
+import api.dtos.SongDto;
 import api.dtos.UserDto;
 import api.exceptions.ArgumentNotValidException;
 import api.exceptions.NotFoundException;
@@ -15,6 +17,7 @@ public class Dispatcher {
 
     private UserApiController userApiController = new UserApiController();
     private PlaylistApiController playlistApiController = new PlaylistApiController();
+    private SongApiController songApiController = new SongApiController();
 
     public void submit(HttpRequest request, HttpResponse response) {
         String ERROR_MESSAGE = "{'error':'%S'}";
@@ -50,8 +53,10 @@ public class Dispatcher {
     private void doPost(HttpRequest request, HttpResponse response) {
         if (request.isEqualsPath(UserApiController.USERS)) {
             response.setBody(this.userApiController.create((UserDto) request.getBody()));
-        }else if (request.isEqualsPath(PlaylistApiController.PLAYLIST)){
+        } else if (request.isEqualsPath(PlaylistApiController.PLAYLIST)) {
             response.setBody(this.playlistApiController.create((PlaylistDto) request.getBody()));
+        } else if (request.isEqualsPath(SongApiController.SONGS)){
+            response.setBody(this.songApiController.create((SongDto) request.getBody()));
         } else {
             throw new RequestInvalidException("method error: " + request.getMethod());
         }

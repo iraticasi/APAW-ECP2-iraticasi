@@ -1,9 +1,7 @@
 package api.daos.memory;
 
 import api.daos.PlaylistDao;
-import api.daos.UserDao;
 import api.entities.Playlist;
-import api.entities.User;
 
 import java.util.HashMap;
 

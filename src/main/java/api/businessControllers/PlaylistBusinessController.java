@@ -2,7 +2,6 @@ package api.businessControllers;
 
 import api.daos.DaoFactory;
 import api.dtos.PlaylistDto;
-import api.dtos.UserDto;
 import api.entities.Playlist;
 import api.entities.User;
 import api.exceptions.NotFoundException;

@@ -1,9 +1,7 @@
 package api.apiControllers;
 
 import api.businessControllers.PlaylistBusinessController;
-import api.businessControllers.UserBusinessController;
 import api.dtos.PlaylistDto;
-import api.dtos.UserDto;
 import api.exceptions.ArgumentNotValidException;
 
 public class PlaylistApiController {
