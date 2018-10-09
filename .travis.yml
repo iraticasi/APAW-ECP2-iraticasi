@@ -8,11 +8,8 @@ branches:
 notifications:
   email:
     recipients:
-    - architect@gmail.com
-services:
-- mysql
-before_install:
-- mysql -e 'CREATE DATABASE IF NOT EXISTS bd;'
+    - i.casi@alumnos.upm.es
 script:
-#Test unitario y de integracion en develop
 - mvn verify
+- mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify
+- mvn sonar:sonar -Dsonar.organization=iraticasi-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR
