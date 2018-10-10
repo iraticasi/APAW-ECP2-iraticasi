@@ -6,6 +6,9 @@ import api.entities.Playlist;
 import api.entities.User;
 import api.exceptions.NotFoundException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class PlaylistBusinessController {
 
     public String create(PlaylistDto playlistDto) {
@@ -16,4 +19,13 @@ public class PlaylistBusinessController {
         return playlist.getId();
     }
 
+    public PlaylistDto read(String id){
+        Playlist playlist = DaoFactory.getFactory().getPlaylistDao().read(id).orElseThrow(
+                () -> new NotFoundException("Playlist (" + id + ")"));
+        return  new PlaylistDto(playlist);
+    }
+
+    public void delete(String id) {
+        DaoFactory.getFactory().getPlaylistDao().deleteById(id);
+    }
 }
