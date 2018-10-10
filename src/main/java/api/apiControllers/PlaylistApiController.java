@@ -6,7 +6,9 @@ import api.exceptions.ArgumentNotValidException;
 
 public class PlaylistApiController {
 
-    public static final String PLAYLISTS = "/playlist";
+    public static final String PLAYLISTS = "/playlists";
+
+    public static final String ID_ID = "/{id}";
 
     private PlaylistBusinessController playlistBusinessController = new PlaylistBusinessController();
 
@@ -15,6 +17,14 @@ public class PlaylistApiController {
         this.validate(playlistDto.getName(), "PlaylistDto name");
         this.validate(playlistDto.getUserId(), "PlaylistDto userId");
         return this.playlistBusinessController.create(playlistDto);
+    }
+
+    public PlaylistDto read(String id) {
+        return this.playlistBusinessController.read(id);
+    }
+
+    public void delete(String id) {
+        this.playlistBusinessController.delete(id);
     }
 
     private void validate(Object property, String message) {

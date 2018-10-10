@@ -6,6 +6,7 @@ import api.daos.DaoFactory;
 import api.daos.memory.DaoMemoryFactory;
 import api.dtos.PlaylistDto;
 import api.dtos.UserDto;
+import api.entities.Playlist;
 import http.Client;
 import http.HttpException;
 import http.HttpRequest;
@@ -13,8 +14,11 @@ import http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PlaylistsIT {
 
@@ -29,12 +33,16 @@ class PlaylistsIT {
         return (String) new Client().submit(request).getBody();
     }
 
-    @Test
-    void createPlaylist() {
+    private String createPlaylist(String name) {
         String userId = this.createUser();
         HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS)
-                .body(new PlaylistDto("Playlist one", userId)).post();
-        new Client().submit(request);
+                .body(new PlaylistDto(name, userId)).post();
+        return (String) new Client().submit(request).getBody();
+    }
+
+    @Test
+    void testCreatePlaylist(){
+        this.createPlaylist("playlist uno");
     }
 
     @Test
@@ -68,4 +76,15 @@ class PlaylistsIT {
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
     }
 
+    @Test
+    void testDelete() {
+        String id = this.createPlaylist("playlist uno");
+        HttpRequest request1 = HttpRequest.builder(PlaylistApiController.PLAYLISTS + "/" + id).get();
+        new Client().submit(request1);
+        HttpRequest request2 = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.ID_ID)
+                .expandPath(id).delete();
+        new Client().submit(request2);
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request1));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
+    }
 }

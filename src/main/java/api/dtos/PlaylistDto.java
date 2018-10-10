@@ -1,10 +1,17 @@
 package api.dtos;
 
+import api.entities.Playlist;
+
 public class PlaylistDto {
 
 
     private String name;
     private String userId;
+
+    public PlaylistDto(Playlist playlist) {
+        this.name = playlist.getName();
+        this.userId = playlist.getUser().getId();
+    }
 
     public PlaylistDto(String name, String userId) {
         this.name = name;

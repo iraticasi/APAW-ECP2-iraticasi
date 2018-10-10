@@ -38,7 +38,8 @@ public class Dispatcher {
                 case PATCH:
                     throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());
                 case DELETE:
-                    throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());
+                    this.doDelete(request);
+                    break;
                 default:
                     throw new RequestInvalidException("method error: " + request.getMethod());
             }
@@ -72,6 +73,8 @@ public class Dispatcher {
     private void doGet(HttpRequest request, HttpResponse response) {
         if (request.isEqualsPath(PodcastApiController.PODCASTS)) {
             response.setBody(this.podcastApiController.readAll());
+        } else if (request.isEqualsPath(PlaylistApiController.PLAYLISTS + PlaylistApiController.ID_ID)) {
+            response.setBody(this.playlistApiController.read(request.getPath(1)));
         } else {
             throw new RequestInvalidException("method error: " + request.getMethod() + ' ' + request.getPath());
         }
@@ -80,6 +83,14 @@ public class Dispatcher {
     private void doPut(HttpRequest request, HttpResponse response) {
         if (request.isEqualsPath(UserApiController.USERS + UserApiController.ID_ID)) {
             this.userApiController.update(request.getPath(1), (UserDto) request.getBody());
+        } else {
+            throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());
+        }
+    }
+
+    private void doDelete(HttpRequest request) {
+        if (request.isEqualsPath(PlaylistApiController.PLAYLISTS + PlaylistApiController.ID_ID)) {
+            this.playlistApiController.delete(request.getPath(1));
         } else {
             throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());
         }
