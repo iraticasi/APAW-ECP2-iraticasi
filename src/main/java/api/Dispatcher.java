@@ -33,7 +33,8 @@ public class Dispatcher {
                     this.doGet(request, response);
                     break;
                 case PUT:
-                    throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());
+                    this.doPut(request, response);
+                    break;
                 case PATCH:
                     throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());
                 case DELETE:
@@ -73,6 +74,14 @@ public class Dispatcher {
             response.setBody(this.podcastApiController.readAll());
         } else {
             throw new RequestInvalidException("method error: " + request.getMethod() + ' ' + request.getPath());
+        }
+    }
+
+    private void doPut(HttpRequest request, HttpResponse response) {
+        if (request.isEqualsPath(UserApiController.USERS + UserApiController.ID_ID)) {
+            this.userApiController.update(request.getPath(1), (UserDto) request.getBody());
+        } else {
+            throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());
         }
     }
 

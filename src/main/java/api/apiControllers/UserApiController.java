@@ -8,6 +8,8 @@ public class UserApiController {
 
     public static final String USERS = "/users";
 
+    public static final String ID_ID = "/{id}";
+
     private UserBusinessController userBusinessController = new UserBusinessController();
 
     public String create(UserDto userDto) {
@@ -21,4 +23,11 @@ public class UserApiController {
             throw new ArgumentNotValidException(message + " is NULL");
         }
     }
+
+    public void update(String id, UserDto userDto) {
+        this.validate(userDto, "userDto");
+        this.validate(userDto.getEmail(), "UserDto Email");
+        this.userBusinessController.updateEmail(id, userDto);
+    }
+
 }
