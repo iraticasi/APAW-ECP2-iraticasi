@@ -18,4 +18,6 @@ public abstract class DaoFactory {
     public abstract PlaylistDao getPlaylistDao();
 
     public abstract SongDao getSongDao();
+
+    public abstract PodcastDao getPodcastDao();
 }

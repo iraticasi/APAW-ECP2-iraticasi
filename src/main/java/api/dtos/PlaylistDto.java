@@ -7,8 +7,6 @@ public class PlaylistDto {
     private String userId;
 
     public PlaylistDto(String name, String userId) {
-        assert name != null;
-        assert userId != null;
         this.name = name;
         this.userId = userId;
     }

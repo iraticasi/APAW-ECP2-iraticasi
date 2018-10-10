@@ -40,6 +40,28 @@ class SongsIT {
     }
 
     @Test
+    void testSongInvalidRequest() {
+        HttpRequest request = HttpRequest.builder(SongApiController.SONGS + "/invalid").body(null).post();
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+    }
+
+    @Test
+    void testCreateSongWithoutSongDto() {
+        HttpRequest request = HttpRequest.builder(SongApiController.SONGS).body(null).post();
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+    }
+
+    @Test
+    void testCreateSongWithoutSongDtoName() {
+        SongDto songDto = new SongDto(null, null, null, null, null);
+        HttpRequest request = HttpRequest.builder(SongApiController.SONGS).body(songDto).post();
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+    }
+
+    @Test
     void createSongWrongDateFormat() {
         SongDto songDto = new SongDto("cancion uno", "cantante", new Integer(253), "99/12/11", Genre.CLASSIC);
         HttpRequest request = HttpRequest.builder(SongApiController.SONGS)
