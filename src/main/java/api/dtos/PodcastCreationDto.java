@@ -1,13 +1,13 @@
 package api.dtos;
 
-public class PodcastDto {
+public class PodcastCreationDto {
 
 
     private String name;
 
     private String description;
 
-    public PodcastDto(String name, String description) {
+    public PodcastCreationDto(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -30,7 +30,7 @@ public class PodcastDto {
 
     @Override
     public String toString() {
-        return "PodcastDto{" +
+        return "PodcastCreationDto{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 '}';

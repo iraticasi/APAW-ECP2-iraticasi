@@ -6,7 +6,7 @@ import api.exceptions.ArgumentNotValidException;
 
 public class PlaylistApiController {
 
-    public static final String PLAYLIST = "/playlist";
+    public static final String PLAYLISTS = "/playlist";
 
     private PlaylistBusinessController playlistBusinessController = new PlaylistBusinessController();
 
