@@ -30,7 +30,8 @@ public class Dispatcher {
                     this.doPost(request, response);
                     break;
                 case GET:
-                    throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());
+                    this.doGet(request, response);
+                    break;
                 case PUT:
                     throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());
                 case PATCH:
@@ -64,6 +65,14 @@ public class Dispatcher {
             response.setBody(this.podcastApiController.create((PodcastDto) request.getBody()));
         } else {
             throw new RequestInvalidException("method error: " + request.getMethod());
+        }
+    }
+
+    private void doGet(HttpRequest request, HttpResponse response) {
+        if (request.isEqualsPath(PodcastApiController.PODCASTS)) {
+            response.setBody(this.podcastApiController.readAll());
+        } else {
+            throw new RequestInvalidException("method error: " + request.getMethod() + ' ' + request.getPath());
         }
     }
 
