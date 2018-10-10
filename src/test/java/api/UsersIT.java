@@ -47,6 +47,37 @@ class UsersIT {
         HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
     }
+    @Test
+    void testUpdateUser() {
+        String id = this.createUser();
+        HttpRequest request = HttpRequest.builder(UserApiController.USERS).path(UserApiController.ID_ID)
+                .expandPath(id).body(new UserDto("dos")).put();
+        new Client().submit(request);
+    }
+
+    @Test
+    void testUpdateUserWithoutUserDto() {
+        String id = this.createUser();
+        HttpRequest request = HttpRequest.builder(UserApiController.USERS).path(UserApiController.ID_ID)
+                .expandPath(id).body(null).put();
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+    }
+    @Test
+    void testUpdateUserWithoutUserDtoEmail() {
+        HttpRequest request = HttpRequest.builder(UserApiController.USERS).path(UserApiController.ID_ID)
+                .expandPath("invalid-id").body(new UserDto(null)).put();
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+    }
+
+    @Test
+    void testUpdateUserNotFoundException() {
+        HttpRequest request = HttpRequest.builder(UserApiController.USERS).path(UserApiController.ID_ID)
+                .expandPath("invalid-id").body(new UserDto("dos")).put();
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
+    }
 
     private String createUser() {
         HttpRequest request = HttpRequest.builder(UserApiController.USERS).body(new UserDto("uno")).post();
