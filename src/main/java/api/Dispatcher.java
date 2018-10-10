@@ -8,7 +8,6 @@ import api.dtos.PlaylistDto;
 import api.dtos.PodcastCreationDto;
 import api.dtos.SongDto;
 import api.dtos.UserDto;
-import api.entities.Playlist;
 import api.exceptions.ArgumentNotValidException;
 import api.exceptions.NotFoundException;
 import api.exceptions.RequestInvalidException;
@@ -74,7 +73,7 @@ public class Dispatcher {
     private void doGet(HttpRequest request, HttpResponse response) {
         if (request.isEqualsPath(PodcastApiController.PODCASTS)) {
             response.setBody(this.podcastApiController.readAll());
-        }else if (request.isEqualsPath(PlaylistApiController.PLAYLISTS + PlaylistApiController.ID_ID)) {
+        } else if (request.isEqualsPath(PlaylistApiController.PLAYLISTS + PlaylistApiController.ID_ID)) {
             response.setBody(this.playlistApiController.read(request.getPath(1)));
         } else {
             throw new RequestInvalidException("method error: " + request.getMethod() + ' ' + request.getPath());
@@ -90,7 +89,7 @@ public class Dispatcher {
     }
 
     private void doDelete(HttpRequest request) {
-        if (request.isEqualsPath(PlaylistApiController.PLAYLISTS+ PlaylistApiController.ID_ID)) {
+        if (request.isEqualsPath(PlaylistApiController.PLAYLISTS + PlaylistApiController.ID_ID)) {
             this.playlistApiController.delete(request.getPath(1));
         } else {
             throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());

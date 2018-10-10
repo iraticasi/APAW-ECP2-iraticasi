@@ -12,6 +12,7 @@ public class UserBusinessController {
         DaoFactory.getFactory().getUserDao().save(user);
         return user.getId();
     }
+
     public void updateEmail(String id, UserDto userDto) {
         User user = DaoFactory.getFactory().getUserDao().read(id).orElseThrow(() -> new NotFoundException("User id: " + id));
         user.setEmail(userDto.getEmail());

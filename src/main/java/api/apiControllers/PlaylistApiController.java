@@ -19,7 +19,7 @@ public class PlaylistApiController {
         return this.playlistBusinessController.create(playlistDto);
     }
 
-    public PlaylistDto read(String id){
+    public PlaylistDto read(String id) {
         return this.playlistBusinessController.read(id);
     }
 
