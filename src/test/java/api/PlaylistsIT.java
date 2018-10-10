@@ -32,21 +32,21 @@ class PlaylistsIT {
     @Test
     void createPlaylist() {
         String userId = this.createUser();
-        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLIST)
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS)
                 .body(new PlaylistDto("Playlist one", userId)).post();
         new Client().submit(request);
     }
 
     @Test
     void testPlaylistInvalidRequest() {
-        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLIST + "/invalid").body(null).post();
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS + "/invalid").body(null).post();
         HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
     }
 
     @Test
     void testCreatePlaylistWithoutPlaylistDto() {
-        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLIST).body(null).post();
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).body(null).post();
         HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
     }
@@ -54,7 +54,7 @@ class PlaylistsIT {
     @Test
     void testCreatePlaylistWithoutPlaylistDtoName() {
         PlaylistDto playlistDto = new PlaylistDto(null, null);
-        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLIST).body(playlistDto).post();
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).body(playlistDto).post();
         HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
     }
@@ -62,7 +62,7 @@ class PlaylistsIT {
 
     @Test
     void createPlaylistserIdNotFound() {
-        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLIST)
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS)
                 .body(new PlaylistDto("Theme one", "invalid-id")).post();
         HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());

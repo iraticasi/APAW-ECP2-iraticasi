@@ -1,7 +1,7 @@
 package api.apiControllers;
 
 import api.businessControllers.PodcastBusinessController;
-import api.dtos.PodcastDto;
+import api.dtos.PodcastCreationDto;
 import api.dtos.PodcastInfoToListDto;
 import api.exceptions.ArgumentNotValidException;
 
@@ -13,10 +13,10 @@ public class PodcastApiController {
 
     private PodcastBusinessController podcastBusinessController = new PodcastBusinessController();
 
-    public String create(PodcastDto podcastDto) {
-        this.validate(podcastDto, "podcastDto");
-        this.validate(podcastDto.getName(), "podcastDto name");
-        return this.podcastBusinessController.create(podcastDto);
+    public String create(PodcastCreationDto podcastCreationDto) {
+        this.validate(podcastCreationDto, "podcastCreationDto");
+        this.validate(podcastCreationDto.getName(), "podcastCreationDto name");
+        return this.podcastBusinessController.create(podcastCreationDto);
     }
 
     public List<PodcastInfoToListDto> readAll() {

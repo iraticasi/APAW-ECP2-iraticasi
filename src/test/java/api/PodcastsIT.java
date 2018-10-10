@@ -3,7 +3,7 @@ package api;
 import api.apiControllers.PodcastApiController;
 import api.daos.DaoFactory;
 import api.daos.memory.DaoMemoryFactory;
-import api.dtos.PodcastDto;
+import api.dtos.PodcastCreationDto;
 import api.dtos.PodcastInfoToListDto;
 import http.Client;
 import http.HttpException;
@@ -24,7 +24,7 @@ class PodcastsIT {
     }
 
     @Test
-    void testCreatePodcast(){
+    void testCreatePodcast() {
         this.createPodcast("podcast one");
     }
 
@@ -44,8 +44,8 @@ class PodcastsIT {
 
     @Test
     void testCreatePodcastWithoutPodcastDtoName() {
-        PodcastDto podcastDto = new PodcastDto(null, null);
-        HttpRequest request = HttpRequest.builder(PodcastApiController.PODCASTS).body(podcastDto).post();
+        PodcastCreationDto podcastCreationDto = new PodcastCreationDto(null, null);
+        HttpRequest request = HttpRequest.builder(PodcastApiController.PODCASTS).body(podcastCreationDto).post();
         HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
     }
@@ -53,17 +53,17 @@ class PodcastsIT {
     @Test
     void testReadAll() {
         for (int i = 0; i < 5; i++) {
-            this.createPodcast("podcast"+i);
+            this.createPodcast("podcast" + i);
         }
         HttpRequest request = HttpRequest.builder(PodcastApiController.PODCASTS).get();
         List<PodcastInfoToListDto> podcastInfoToListDtos = (List<PodcastInfoToListDto>) new Client().submit(request).getBody();
-        assertTrue(podcastInfoToListDtos.size()>=5);
+        assertTrue(podcastInfoToListDtos.size() >= 5);
     }
 
     @Test
     private String createPodcast(String name) {
-        PodcastDto podcastDto = new PodcastDto(name, null);
-        HttpRequest request = HttpRequest.builder(PodcastApiController.PODCASTS).body(podcastDto).post();
+        PodcastCreationDto podcastCreationDto = new PodcastCreationDto(name, null);
+        HttpRequest request = HttpRequest.builder(PodcastApiController.PODCASTS).body(podcastCreationDto).post();
         return (String) new Client().submit(request).getBody();
     }
 }
