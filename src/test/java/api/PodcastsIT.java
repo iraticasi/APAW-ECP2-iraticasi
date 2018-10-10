@@ -4,6 +4,7 @@ import api.apiControllers.PodcastApiController;
 import api.daos.DaoFactory;
 import api.daos.memory.DaoMemoryFactory;
 import api.dtos.PodcastDto;
+import api.dtos.PodcastInfoToListDto;
 import http.Client;
 import http.HttpException;
 import http.HttpRequest;
@@ -11,8 +12,9 @@ import http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class PodcastsIT {
 
@@ -22,10 +24,8 @@ class PodcastsIT {
     }
 
     @Test
-    void createPodcast() {
-        PodcastDto podcastDto = new PodcastDto("nombre", null);
-        HttpRequest request = HttpRequest.builder(PodcastApiController.PODCASTS).body(podcastDto).post();
-        new Client().submit(request).getBody();
+    void testCreatePodcast(){
+        this.createPodcast("podcast one");
     }
 
     @Test
@@ -50,4 +50,20 @@ class PodcastsIT {
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
     }
 
+    @Test
+    void testReadAll() {
+        for (int i = 0; i < 5; i++) {
+            this.createPodcast("podcast"+i);
+        }
+        HttpRequest request = HttpRequest.builder(PodcastApiController.PODCASTS).get();
+        List<PodcastInfoToListDto> podcastInfoToListDtos = (List<PodcastInfoToListDto>) new Client().submit(request).getBody();
+        assertTrue(podcastInfoToListDtos.size()>=5);
+    }
+
+    @Test
+    private String createPodcast(String name) {
+        PodcastDto podcastDto = new PodcastDto(name, null);
+        HttpRequest request = HttpRequest.builder(PodcastApiController.PODCASTS).body(podcastDto).post();
+        return (String) new Client().submit(request).getBody();
+    }
 }
