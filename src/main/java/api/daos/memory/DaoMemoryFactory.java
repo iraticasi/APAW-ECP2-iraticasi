@@ -1,9 +1,6 @@
 package api.daos.memory;
 
-import api.daos.DaoFactory;
-import api.daos.PlaylistDao;
-import api.daos.SongDao;
-import api.daos.UserDao;
+import api.daos.*;
 
 public class DaoMemoryFactory extends DaoFactory {
 
@@ -12,6 +9,8 @@ public class DaoMemoryFactory extends DaoFactory {
     private PlaylistDao playlistDao;
 
     private SongDao songDao;
+
+    private PodcastDao podcastDao;
 
     @Override
     public UserDao getUserDao() {
@@ -35,5 +34,13 @@ public class DaoMemoryFactory extends DaoFactory {
             songDao = new SongDaoMemory();
         }
         return songDao;
+    }
+
+    @Override
+    public PodcastDao getPodcastDao() {
+        if (podcastDao == null) {
+            podcastDao = new PodcastDaoMemory();
+        }
+        return podcastDao;
     }
 }
