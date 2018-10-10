@@ -64,7 +64,6 @@
 ### DELETE /playlists/{id}
 #### Respuesta
 - 200 OK 
-- 404 NOT_FOUND
 ---
 ### PATH /playlists/{id}/songs
 #### Parámetros del cuerpo
