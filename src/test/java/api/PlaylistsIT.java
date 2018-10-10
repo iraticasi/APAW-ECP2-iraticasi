@@ -38,6 +38,29 @@ class PlaylistsIT {
     }
 
     @Test
+    void testPlaylistInvalidRequest() {
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLIST + "/invalid").body(null).post();
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+    }
+
+    @Test
+    void testCreatePlaylistWithoutPlaylistDto() {
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLIST).body(null).post();
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+    }
+
+    @Test
+    void testCreatePlaylistWithoutPlaylistDtoName() {
+        PlaylistDto playlistDto = new PlaylistDto(null, null);
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLIST).body(playlistDto).post();
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+    }
+
+
+    @Test
     void createPlaylistserIdNotFound() {
         HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLIST)
                 .body(new PlaylistDto("Theme one", "invalid-id")).post();
