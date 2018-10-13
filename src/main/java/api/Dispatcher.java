@@ -36,7 +36,8 @@ public class Dispatcher {
                     this.doPut(request, response);
                     break;
                 case PATCH:
-                    throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());
+                    this.doPatch(request);
+                    break;
                 case DELETE:
                     this.doDelete(request);
                     break;
@@ -53,6 +54,14 @@ public class Dispatcher {
             exception.printStackTrace();
             response.setBody(String.format(ERROR_MESSAGE, exception));
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void doPatch(HttpRequest request) {
+        if (request.isEqualsPath(PlaylistApiController.PLAYLISTS+ PlaylistApiController.ID_ID + PlaylistApiController.SONGS)) {
+            this.playlistApiController.addSong(request.getPath(1), (String) request.getBody());
+        } else {
+            throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());
         }
     }
 

@@ -3,6 +3,7 @@ package api.businessControllers;
 import api.daos.DaoFactory;
 import api.dtos.PlaylistDto;
 import api.entities.Playlist;
+import api.entities.Song;
 import api.entities.User;
 import api.exceptions.NotFoundException;
 
@@ -24,5 +25,13 @@ public class PlaylistBusinessController {
 
     public void delete(String id) {
         DaoFactory.getFactory().getPlaylistDao().deleteById(id);
+    }
+
+    public void addSong(String playlistId, String songId) {
+        Playlist playlist = DaoFactory.getFactory().getPlaylistDao().read(playlistId).orElseThrow(
+                () -> new NotFoundException("Playlist (" + playlistId + ")"));
+        Song song= DaoFactory.getFactory().getSongDao().read(songId).orElseThrow(
+                () -> new NotFoundException("Song (" + songId + ")"));
+        playlist.add(song);
     }
 }
