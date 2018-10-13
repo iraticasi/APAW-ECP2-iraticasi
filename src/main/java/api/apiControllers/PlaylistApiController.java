@@ -9,6 +9,7 @@ public class PlaylistApiController {
     public static final String PLAYLISTS = "/playlists";
 
     public static final String ID_ID = "/{id}";
+    public static final String SONGS = "/songs";
 
     private PlaylistBusinessController playlistBusinessController = new PlaylistBusinessController();
 
@@ -31,5 +32,9 @@ public class PlaylistApiController {
         if (property == null) {
             throw new ArgumentNotValidException(message + " is NULL");
         }
+    }
+
+    public void addSong(String playlistId, String songId) {
+        this.playlistBusinessController.addSong(playlistId, songId);
     }
 }
