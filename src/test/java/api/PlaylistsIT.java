@@ -20,11 +20,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PlaylistsIT {
 
@@ -34,13 +33,12 @@ class PlaylistsIT {
         DaoFactory.setFactory(new DaoMemoryFactory());
     }
 
-    private String createUser() {
-        HttpRequest request = HttpRequest.builder(UserApiController.USERS).body(new UserDto("uno")).post();
+    private String createUser(String name) {
+        HttpRequest request = HttpRequest.builder(UserApiController.USERS).body(new UserDto(name)).post();
         return (String) new Client().submit(request).getBody();
     }
 
-    private String createPlaylist(String name) {
-        String userId = this.createUser();
+    private String createPlaylist(String name, String userId) {
         HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS)
                 .body(new PlaylistDto(name, userId)).post();
         return (String) new Client().submit(request).getBody();
@@ -55,7 +53,7 @@ class PlaylistsIT {
 
     @Test
     void testCreatePlaylist(){
-        this.createPlaylist("playlist uno");
+        this.createPlaylist("playlist uno", this.createUser("user uno"));
     }
 
     @Test
@@ -91,19 +89,18 @@ class PlaylistsIT {
 
     @Test
     void testDelete() {
-        String id = this.createPlaylist("playlist uno");
-        HttpRequest request1 = HttpRequest.builder(PlaylistApiController.PLAYLISTS + "/" + id).get();
-        new Client().submit(request1);
+        String id = this.createPlaylist("playlist uno",this.createUser("user uno"));
+        DaoFactory.getFactory().getPlaylistDao().read(id).orElseThrow(
+                () -> new NotFoundException("Playlist (" + id + ")"));
         HttpRequest request2 = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.ID_ID)
                 .expandPath(id).delete();
         new Client().submit(request2);
-        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request1));
-        assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
+        assertEquals(Optional.empty() ,DaoFactory.getFactory().getPlaylistDao().read(id));
     }
 
     @Test
     void testAddSong() {
-        String playlistId = this.createPlaylist("playlist uno");
+        String playlistId = this.createPlaylist("playlist uno", this.createUser("user uno"));
         String songId = this.createSong("song uno");
         HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.ID_ID)
                 .expandPath(playlistId).path(PlaylistApiController.SONGS).body(songId).patch();
@@ -130,10 +127,40 @@ class PlaylistsIT {
 
     @Test
     void testAddSongNoFound(){
-        String playlistId = this.createPlaylist("playlist uno");
+        String playlistId = this.createPlaylist("playlist uno", this.createUser("user uno"));
         String songId = "invalid";
         HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.ID_ID)
                 .expandPath(playlistId).path(PlaylistApiController.SONGS).body(songId).patch();
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
+    }
+
+    @Test
+    void testFindByUser(){
+        String userId = this.createUser("user uno");
+        this.createPlaylist("playlist uno", userId);
+        this.createPlaylist("playlist dos", userId);
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.SEARCH)
+                .param("user", userId).get();
+        List<PlaylistDto> playlistDtos = (List<PlaylistDto>) new Client().submit(request).getBody();
+        assertEquals(2, playlistDtos.size());
+    }
+
+    @Test
+    void testFindByUserEmpty(){
+        String userId = this.createUser("user uno");
+        String playlistId = this.createPlaylist("playlist uno", this.createUser("user dos"));
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.SEARCH)
+                .param("user", userId).get();
+        List<PlaylistDto> playlistDtos = (List<PlaylistDto>) new Client().submit(request).getBody();
+        assertTrue( playlistDtos.isEmpty());
+    }
+
+    @Test
+    void testFindByUserNotFound(){
+        String playlistId = this.createPlaylist("playlist uno", this.createUser("user uno"));
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.SEARCH)
+                .param("user", "invalid").get();
         HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
     }
