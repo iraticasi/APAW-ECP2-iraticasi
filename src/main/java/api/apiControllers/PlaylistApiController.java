@@ -28,13 +28,13 @@ public class PlaylistApiController {
         this.playlistBusinessController.delete(id);
     }
 
+    public void addSong(String playlistId, String songId) {
+        this.playlistBusinessController.addSong(playlistId, songId);
+    }
+
     private void validate(Object property, String message) {
         if (property == null) {
             throw new ArgumentNotValidException(message + " is NULL");
         }
-    }
-
-    public void addSong(String playlistId, String songId) {
-        this.playlistBusinessController.addSong(playlistId, songId);
     }
 }
