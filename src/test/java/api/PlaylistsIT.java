@@ -117,4 +117,24 @@ class PlaylistsIT {
         assertEquals(expected, playlist.getSongs());
 
     }
+
+    @Test
+    void testAddSongPlaylistNoFound(){
+        String playlistId = "invalid";
+        String songId = this.createSong("song uno");
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.ID_ID)
+                .expandPath(playlistId).path(PlaylistApiController.SONGS).body(songId).patch();
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
+    }
+
+    @Test
+    void testAddSongNoFound(){
+        String playlistId = this.createPlaylist("playlist uno");
+        String songId = "invalid";
+        HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.ID_ID)
+                .expandPath(playlistId).path(PlaylistApiController.SONGS).body(songId).patch();
+        HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
+    }
 }
