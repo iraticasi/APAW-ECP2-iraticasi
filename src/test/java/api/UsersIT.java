@@ -47,6 +47,7 @@ class UsersIT {
         HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
     }
+
     @Test
     void testUpdateUser() {
         String id = this.createUser();
@@ -63,6 +64,7 @@ class UsersIT {
         HttpException exception = assertThrows(HttpException.class, () -> new Client().submit(request));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
     }
+
     @Test
     void testUpdateUserWithoutUserDtoEmail() {
         HttpRequest request = HttpRequest.builder(UserApiController.USERS).path(UserApiController.ID_ID)

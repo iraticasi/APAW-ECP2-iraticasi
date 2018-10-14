@@ -23,11 +23,11 @@ class SongsIT {
         DaoFactory.setFactory(new DaoMemoryFactory());
     }
 
-    private  String createSong(String name) {
+    private String createSong(String name) {
         SongDto songDto = new SongDto(name, null, null, null, null);
         HttpRequest request = HttpRequest.builder(SongApiController.SONGS)
                 .body(songDto).post();
-        return (String)new Client().submit(request).getBody();
+        return (String) new Client().submit(request).getBody();
     }
 
     @Test
