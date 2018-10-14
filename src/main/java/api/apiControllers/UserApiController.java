@@ -18,16 +18,15 @@ public class UserApiController {
         return this.userBusinessController.create(userDto);
     }
 
-    private void validate(Object property, String message) {
-        if (property == null) {
-            throw new ArgumentNotValidException(message + " is NULL");
-        }
-    }
-
     public void update(String id, UserDto userDto) {
         this.validate(userDto, "userDto");
         this.validate(userDto.getEmail(), "UserDto Email");
         this.userBusinessController.updateEmail(id, userDto);
     }
 
+    private void validate(Object property, String message) {
+        if (property == null) {
+            throw new ArgumentNotValidException(message + " is NULL");
+        }
+    }
 }

@@ -35,14 +35,14 @@ public class PlaylistApiController {
         this.playlistBusinessController.addSong(playlistId, songId);
     }
 
+    public List<PlaylistDto> findByUser(String userId) {
+        this.validate(userId, "query param user");
+        return playlistBusinessController.findByUser(userId);
+    }
+
     private void validate(Object property, String message) {
         if (property == null) {
             throw new ArgumentNotValidException(message + " is NULL");
         }
-    }
-
-    public List<PlaylistDto> findByUser(String userId) {
-        this.validate(userId, "query param user");
-        return playlistBusinessController.findByUser(userId);
     }
 }
