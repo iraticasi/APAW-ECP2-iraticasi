@@ -27,7 +27,7 @@ public class PlaylistBusinessController {
     public void addSong(String playlistId, String songId) {
         Playlist playlist = DaoFactory.getFactory().getPlaylistDao().read(playlistId).orElseThrow(
                 () -> new NotFoundException("Playlist (" + playlistId + ")"));
-        Song song= DaoFactory.getFactory().getSongDao().read(songId).orElseThrow(
+        Song song = DaoFactory.getFactory().getSongDao().read(songId).orElseThrow(
                 () -> new NotFoundException("Song (" + songId + ")"));
         playlist.add(song);
     }
@@ -37,7 +37,7 @@ public class PlaylistBusinessController {
                 () -> new NotFoundException("User (" + userId + ")"));
         List<Playlist> playlists = DaoFactory.getFactory().getPlaylistDao().findAll();
         List<PlaylistDto> playlistDtos = new ArrayList<>();
-        for (Playlist playlist: playlists) {
+        for (Playlist playlist : playlists) {
             if (playlist.getUser().equals(user))
                 playlistDtos.add(new PlaylistDto(playlist));
         }

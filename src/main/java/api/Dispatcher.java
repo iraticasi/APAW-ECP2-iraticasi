@@ -58,7 +58,7 @@ public class Dispatcher {
     }
 
     private void doPatch(HttpRequest request) {
-        if (request.isEqualsPath(PlaylistApiController.PLAYLISTS+ PlaylistApiController.ID_ID + PlaylistApiController.SONGS)) {
+        if (request.isEqualsPath(PlaylistApiController.PLAYLISTS + PlaylistApiController.ID_ID + PlaylistApiController.SONGS)) {
             this.playlistApiController.addSong(request.getPath(1), (String) request.getBody());
         } else {
             throw new RequestInvalidException("request error: " + request.getMethod() + ' ' + request.getPath());
@@ -82,7 +82,7 @@ public class Dispatcher {
     private void doGet(HttpRequest request, HttpResponse response) {
         if (request.isEqualsPath(PodcastApiController.PODCASTS)) {
             response.setBody(this.podcastApiController.readAll());
-        } else if (request.isEqualsPath(PlaylistApiController.PLAYLISTS+ PlaylistApiController.SEARCH)) {
+        } else if (request.isEqualsPath(PlaylistApiController.PLAYLISTS + PlaylistApiController.SEARCH)) {
             response.setBody(this.playlistApiController.findByUser(request.getParams().get("user")));
         } else {
             throw new RequestInvalidException("method error: " + request.getMethod() + ' ' + request.getPath());

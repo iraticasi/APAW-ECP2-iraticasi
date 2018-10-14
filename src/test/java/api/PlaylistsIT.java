@@ -44,15 +44,15 @@ class PlaylistsIT {
         return (String) new Client().submit(request).getBody();
     }
 
-    private  String createSong(String name) {
+    private String createSong(String name) {
         SongDto songDto = new SongDto(name, null, null, null, null);
         HttpRequest request = HttpRequest.builder(SongApiController.SONGS)
                 .body(songDto).post();
-        return (String)new Client().submit(request).getBody();
+        return (String) new Client().submit(request).getBody();
     }
 
     @Test
-    void testCreatePlaylist(){
+    void testCreatePlaylist() {
         this.createPlaylist("playlist uno", this.createUser("user uno"));
     }
 
@@ -89,13 +89,13 @@ class PlaylistsIT {
 
     @Test
     void testDelete() {
-        String id = this.createPlaylist("playlist uno",this.createUser("user uno"));
+        String id = this.createPlaylist("playlist uno", this.createUser("user uno"));
         DaoFactory.getFactory().getPlaylistDao().read(id).orElseThrow(
                 () -> new NotFoundException("Playlist (" + id + ")"));
         HttpRequest request2 = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.ID_ID)
                 .expandPath(id).delete();
         new Client().submit(request2);
-        assertEquals(Optional.empty() ,DaoFactory.getFactory().getPlaylistDao().read(id));
+        assertEquals(Optional.empty(), DaoFactory.getFactory().getPlaylistDao().read(id));
     }
 
     @Test
@@ -105,9 +105,9 @@ class PlaylistsIT {
         HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.ID_ID)
                 .expandPath(playlistId).path(PlaylistApiController.SONGS).body(songId).patch();
         new Client().submit(request);
-        Playlist playlist= DaoFactory.getFactory().getPlaylistDao().read(playlistId)
+        Playlist playlist = DaoFactory.getFactory().getPlaylistDao().read(playlistId)
                 .orElseThrow(() -> new NotFoundException("Playlist id: " + playlistId));
-        Song song= DaoFactory.getFactory().getSongDao().read(songId)
+        Song song = DaoFactory.getFactory().getSongDao().read(songId)
                 .orElseThrow(() -> new NotFoundException("Song id: " + songId));
         Set<Song> expected = new HashSet<>();
         expected.add(song);
@@ -116,7 +116,7 @@ class PlaylistsIT {
     }
 
     @Test
-    void testAddSongPlaylistNoFound(){
+    void testAddSongPlaylistNoFound() {
         String playlistId = "invalid";
         String songId = this.createSong("song uno");
         HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.ID_ID)
@@ -126,7 +126,7 @@ class PlaylistsIT {
     }
 
     @Test
-    void testAddSongNoFound(){
+    void testAddSongNoFound() {
         String playlistId = this.createPlaylist("playlist uno", this.createUser("user uno"));
         String songId = "invalid";
         HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.ID_ID)
@@ -136,7 +136,7 @@ class PlaylistsIT {
     }
 
     @Test
-    void testFindByUser(){
+    void testFindByUser() {
         String userId = this.createUser("user uno");
         this.createPlaylist("playlist uno", userId);
         this.createPlaylist("playlist dos", userId);
@@ -147,17 +147,17 @@ class PlaylistsIT {
     }
 
     @Test
-    void testFindByUserEmpty(){
+    void testFindByUserEmpty() {
         String userId = this.createUser("user uno");
         String playlistId = this.createPlaylist("playlist uno", this.createUser("user dos"));
         HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.SEARCH)
                 .param("user", userId).get();
         List<PlaylistDto> playlistDtos = (List<PlaylistDto>) new Client().submit(request).getBody();
-        assertTrue( playlistDtos.isEmpty());
+        assertTrue(playlistDtos.isEmpty());
     }
 
     @Test
-    void testFindByUserNotFound(){
+    void testFindByUserNotFound() {
         String playlistId = this.createPlaylist("playlist uno", this.createUser("user uno"));
         HttpRequest request = HttpRequest.builder(PlaylistApiController.PLAYLISTS).path(PlaylistApiController.SEARCH)
                 .param("user", "invalid").get();
